@@ -40,7 +40,8 @@
       color: #777;
       margin-bottom: 15px;
     }
-    input[type="tel"] {
+    input[type="tel"],
+    input[type="number"] {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
@@ -110,12 +111,13 @@
 </head>
 <body>
   <div class="container">
-        <img src="https://i.ibb.co/dJpXBP1q/channels4-profile.jpg" alt="GreenZap Logo" class="logo">
-
+    <img src="https://i.ibb.co/dJpXBP1q/channels4-profile.jpg" alt="GreenZap Logo" class="logo">
     <h1>Licenças Z-API</h1>
-
     <p class="note">As licenças duram até 2 dias</p>
+    
     <input type="tel" id="telefone" placeholder="Digite seu telefone..." />
+    <input type="number" id="quantidade" placeholder="Quantidade de licenças (máx 30)" min="1" max="30" />
+    
     <button onclick="gerarLicenca()">Gerar Licenças</button>
 
     <div class="loading" id="loading" style="display: none;">Gerando, aguarde...</div>
@@ -125,17 +127,18 @@
       <p id="linkResultado"></p>
       <button class="copy-btn" onclick="copiarLink()">Copiar Link</button>
     </div>
+
     <hr/>
-      <div class="promo">
+    <div class="promo">
       <p>🌟 Conheça a melhor ferramenta de disparo com botões!</p>
       <a href="https://www.greenzap.top/" target="_blank">Conhecer agora</a>
     </div>
   </div>
 
-
   <script>
     async function gerarLicenca() {
       const telefone = document.getElementById("telefone").value.trim();
+      const quantidade = parseInt(document.getElementById("quantidade").value.trim(), 10);
       const loading = document.getElementById("loading");
       const linkBox = document.getElementById("linkBox");
       const linkResultado = document.getElementById("linkResultado");
@@ -145,10 +148,16 @@
         return;
       }
 
+      if (!quantidade || quantidade < 1 || quantidade > 30) {
+        alert("Por favor, selecione uma quantidade entre 1 e 30.");
+        return;
+      }
+
       loading.style.display = "block";
       linkBox.style.display = "none";
 
-      const url = `https://script.google.com/macros/s/AKfycbyZXnaCfbkrH0S1rNt9BHpUfdWk8mee-TDQKS_e6k8yymsSZcoA9n15iQ8sWwn6vMnrvg/exec?action=getLicencas&telefone=${encodeURIComponent(telefone)}`;
+      const url = `https://script.google.com/macros/s/AKfycbyZXnaCfbkrH0S1rNt9BHpUfdWk8mee-TDQKS_e6k8yymsSZcoA9n15iQ8sWwn6vMnrvg/exec?action=getLicencas&telefone=${encodeURIComponent(telefone)}&qtd=${quantidade}`;
+      
       try {
         const response = await fetch(url);
         const texto = await response.text();
