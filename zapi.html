@@ -5,40 +5,37 @@
   <title>Configuração Z-API</title>
 </head>
 <body>
-  <h2>Configuração do Z-API</h2>
+  <h2>🛠️ Configuração Z-API</h2>
   <form id="configForm">
-    <label>Email Base do Gmail:</label><br>
-    <input type="email" id="emailBase" placeholder="ex: meuemail@gmail.com" required><br><br>
+    <label><strong>Config URL</strong> (para o Script 1 - Cadastro):</label><br>
+    <input type="url" id="configURL" placeholder="https://script.google.com/macros/...exec?cod=XXXXX" required><br><br>
 
-    <label>URL do Script:</label><br>
-    <input type="url" id="scriptURL" placeholder="URL do Google Script" required><br><br>
+    <label><strong>Final URL</strong> (para o Script 2 - Visualização):</label><br>
+    <input type="url" id="finalURL" placeholder="https://script.google.com/macros/...exec"><br><br>
 
-    <label>URL Final (opcional):</label><br>
-    <input type="url" id="finalURL" placeholder="URL de destino para envio de dados"><br><br>
-
-    <button type="submit">Salvar Configuração</button>
+    <button type="submit">💾 Salvar Configuração</button>
   </form>
 
   <script>
     const form = document.getElementById('configForm');
+
+    // Carrega valores já salvos
+    const saved = JSON.parse(localStorage.getItem("zapi-config") || "{}");
+    document.getElementById("configURL").value = saved.configURL || "";
+    document.getElementById("finalURL").value = saved.finalURL || "";
+
+    // Salva nova configuração
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
       const config = {
-        emailBase: document.getElementById('emailBase').value,
-        scriptURL: document.getElementById('scriptURL').value,
-        finalURL: document.getElementById('finalURL').value,
+        configURL: document.getElementById('configURL').value.trim(),
+        finalURL: document.getElementById('finalURL').value.trim(),
       };
+
       localStorage.setItem('zapi-config', JSON.stringify(config));
       alert("✅ Configuração salva com sucesso!");
     });
-
-    // Preencher com valores salvos ao abrir
-    window.onload = () => {
-      const saved = JSON.parse(localStorage.getItem('zapi-config') || '{}');
-      if (saved.emailBase) document.getElementById('emailBase').value = saved.emailBase;
-      if (saved.scriptURL) document.getElementById('scriptURL').value = saved.scriptURL;
-      if (saved.finalURL) document.getElementById('finalURL').value = saved.finalURL;
-    };
   </script>
 </body>
 </html>
