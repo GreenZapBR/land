@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificador Protegido</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Carregando conteúdo protegido...</h2>
+  <div id="conteudoProtegido">Aguarde...</div>
+
+  <script>
+    async function carregarConteudoProtegido() {
+      try {
+        const resposta = await fetch("https://script.google.com/macros/s/AKfycbx0OJGLzWdvWEiCSzo_qi6lRtI8x0lJe3sFfs9YS4R06bSrindk9kGJ25ekJHJV8uWz/exec?token=poor");
+        if (!resposta.ok) throw new Error("Erro ao carregar");
+
+        const html = await resposta.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (e) {
+        document.getElementById("conteudoProtegido").innerHTML = "⛔ Conteúdo não disponível.";
+      }
+    }
+
+    carregarConteudoProtegido();
+  </script>
+</body>
+</html>
